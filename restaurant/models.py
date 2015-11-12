@@ -14,5 +14,3 @@ class Restaurant(models.Model):
     rc_point = models.FloatField()
     vote = models.FloatField()
 
-    def __unicode__(self):
-        return "{} (id={})".format(self.user.name, self.id)
