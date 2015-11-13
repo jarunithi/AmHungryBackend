@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from restaurant.models import Restaurant
 from restaurant.serializer import RestaurantSerializer
+from restaurant.serializer import RequestSerializer
 import os.path, subprocess
 from subprocess import STDOUT, PIPE
 
@@ -24,16 +25,25 @@ class RestaurantViewList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class TestJava(APIView):
-    serializer_class = RestaurantSerializer
+class GetRestaurant(APIView):
+    serializer_class = RequestSerializer
 
-    def get(self, request):
-        # self.compile_java('java/rule/HelloWorld.java')
-        a = self.execute_java('java/rule/test.jar', '')
-        return Response(a)
-
-    def compile_java(self, java_file):
-        subprocess.check_call(['javac', java_file])
+    def post(self, request):
+        user_input = request.data['res_type'] + ',' + request.data['price'] + ',' + request.data['user_x'] + ',' + request.data['user_y']
+        # print user_input
+        a = self.execute_java('rule.jar', user_input)
+        # a = "INFO: Rule 'Vote rule' has been evaluated to false, it has not been executed.\n|-result-| = 0,"
+        if a.find("|-result-| = ") == -1:
+            print a
+            return Response("Rule is broken", status=status.HTTP_200_OK)
+        a = a.split("|-result-| = ")
+        a = a[1].split(",")
+        a.pop()
+        if len(a) < 2:
+            return Response("No restaurant is suitable now", status=status.HTTP_200_OK)
+        restaurant = Restaurant.objects.filter(id__in=a)
+        response = self.serializer_class(restaurant, many=True)
+        return Response(response.data, status=status.HTTP_200_OK)
 
     def execute_java(self, java_file, stdin):
         java_class, ext = os.path.splitext(java_file)
