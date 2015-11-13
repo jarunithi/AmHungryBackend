@@ -34,7 +34,6 @@ class GetRestaurant(APIView):
         a = self.execute_java('rule.jar', user_input)
         # a = "INFO: Rule 'Vote rule' has been evaluated to false, it has not been executed.\n|-result-| = 0,"
         if a.find("|-result-| = ") == -1:
-            print a
             return Response("Rule is broken", status=status.HTTP_200_OK)
         a = a.split("|-result-| = ")
         a = a[1].split(",")
