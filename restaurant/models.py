@@ -13,4 +13,4 @@ class Restaurant(models.Model):
     location_y = models.FloatField()
     rc_point = models.FloatField()
     vote = models.FloatField()
-
+    pic = models.URLField(max_length=200, null=True)

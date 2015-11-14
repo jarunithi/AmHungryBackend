@@ -9,7 +9,7 @@ class RestaurantSerializer(ModelSerializer):
         model = Restaurant
         fields = ('id', 'name', 'price', 'type',
                   'open_time', 'close_time', 'location_x',
-                  'location_y', 'vote')
+                  'location_y', 'vote', 'pic')
 
 
 class RequestSerializer(serializers.Serializer):

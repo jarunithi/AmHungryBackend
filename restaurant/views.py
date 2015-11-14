@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from restaurant.models import Restaurant
+from rest_framework import serializers
 from restaurant.serializer import RestaurantSerializer
 from restaurant.serializer import RequestSerializer
 import os.path, subprocess
@@ -26,9 +27,10 @@ class RestaurantViewList(APIView):
 
 
 class GetRestaurant(APIView):
-    serializer_class = RequestSerializer
+    # serializer_class = RequestSerializer
 
     def post(self, request):
+        serializer_class = RestaurantSerializer
         user_input = request.data['res_type'] + ',' + request.data['price'] + ',' + request.data['user_x'] + ',' + request.data['user_y']
         # print user_input
         a = self.execute_java('rule.jar', user_input)
@@ -41,8 +43,9 @@ class GetRestaurant(APIView):
         if len(a) < 2:
             return Response("No restaurant is suitable now", status=status.HTTP_200_OK)
         restaurant = Restaurant.objects.filter(id__in=a)
-        response = self.serializer_class(restaurant, many=True)
-        return Response(response.data, status=status.HTTP_200_OK)
+        response = serializer_class(restaurant, many=True)
+        return Response(response.data)
+
 
     def execute_java(self, java_file, stdin):
         java_class, ext = os.path.splitext(java_file)

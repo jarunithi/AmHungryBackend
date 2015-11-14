@@ -6,6 +6,6 @@ from models import Restaurant
 class RestaurantAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'price', 'type',
                     'open_time', 'close_time', 'location_x',
-                    'location_y', 'vote', 'rc_point')
+                    'location_y', 'vote', 'rc_point', 'pic')
 
 admin.site.register(Restaurant, RestaurantAdmin)
