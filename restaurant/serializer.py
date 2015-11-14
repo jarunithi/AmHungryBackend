@@ -17,3 +17,4 @@ class RequestSerializer(serializers.Serializer):
     res_type = serializers.CharField(max_length=200)
     user_x = serializers.FloatField()
     user_y = serializers.FloatField()
+    distance = serializers.FloatField()

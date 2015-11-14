@@ -31,7 +31,7 @@ class GetRestaurant(APIView):
 
     def post(self, request):
         serializer_class = RestaurantSerializer
-        user_input = request.data['res_type'] + ',' + request.data['price'] + ',' + request.data['user_x'] + ',' + request.data['user_y']
+        user_input = request.data['res_type'] + ',' + request.data['price'] + ',' + request.data['user_x'] + ',' + request.data['user_y'] + ',' + request.data['distance']
         # print user_input
         a = self.execute_java('rule.jar', user_input)
         # a = "INFO: Rule 'Vote rule' has been evaluated to false, it has not been executed.\n|-result-| = 0,"
