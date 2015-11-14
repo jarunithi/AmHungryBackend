@@ -6,7 +6,7 @@ from restaurant.models import Restaurant
 from rest_framework import serializers
 from restaurant.serializer import RestaurantSerializer
 from restaurant.serializer import RequestSerializer
-import os.path, subprocess
+import os.path, subprocess, time
 from subprocess import STDOUT, PIPE
 
 
@@ -48,6 +48,8 @@ class GetRestaurant(APIView):
 
 
     def execute_java(self, java_file, stdin):
+        os.environ['TZ'] = "Asia/Bangkok"
+        time.tzset()
         java_class, ext = os.path.splitext(java_file)
         cmd = ['java', '-jar', java_file]
         print cmd
